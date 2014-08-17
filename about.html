@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8"/>
+    <title>DEFERRED</title>
+    <style type="text/css">
+      code a{text-decoration:none;}
+      h1{display:inline-block;font-size: 28pt;margin-bottom:0;}
+      code{font-family: Consolas, Inconsolata, monospace;}
+      h4{display: inline-block;margin:0;padding:0;}
+      ul{list-style: none;}
+      .package li{margin-bottom: 20px;}
+      .package pre{margin: 0 0 0 10px; white-space: pre-wrap;}
+      .package .nicknames{font-size: 12pt; font-weight: normal;}
+      table{margin: 20px;}
+      td{padding-bottom: 10px;}
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>deferred</h1>
+      <span>0.9.0</span>
+      <p>A simple library allowing you to write code using deferred libraries.</p>
+    </header>
+    <div id="content">
+      <article>
+        <documentate>
+          <span><h2>About Deferred</h2>
+
+<p>Sometimes I would like to include code in my project that is only available if certain libraries are loaded. Since I don't want to require these libraries as dependencies, but can't refer to their symbols either without them being loaded, things get a bit messy. This library attempts to provide a much more convenient way.</p>
+
+<h2>How To</h2>
+
+<p>Deferred uses two components: a dispatch reader macro on <code>#^</code> and a macro, <code><a href="#DEFERRED:WITH-DEFERRED-LIBRARY">WITH-DEFERRED-LIBRARY</a></code>. <code>#^</code> is used to circumvent the reader problem of being unable to refer to symbols in packages that don't exist at read-time. The macro is used to then acquire access to the symbol's environment to figure out the proper transformation for the symbol into an execution-time determined value.</p>
+
+<pre><code>(<a href="#DEFERRED:WITH-DEFERRED-LIBRARY">with-deferred-library</a> (:drakma)
+  (#^http-request &quot;http://google.com&quot;))</code></pre>
+
+<p>Deferred symbols can be used in function calls, with <code><a href="http://l1sp.org/cl/FUNCTION">FUNCTION</a></code> and <code><a href="http://l1sp.org/cl/QUOTE">QUOTE</a></code> and as values (f.e. special variables). Currently unsupported are deferred <code><a href="http://l1sp.org/cl/SETF">SETF</a></code> functions as it's impossible to properly defer a <code><a href="http://l1sp.org/cl/SETF">SETF</a></code>-expander until execution-time.</p>
+
+<p>If the default dispatch reader macro has been overwritten in your readtable for one reason or another, you can use <code>(named-readtables:in-readtable :deferred)</code>.</p>
+</span>
+        </documentate>
+      </article>
+      <article>
+        <h2>Copyright</h2>
+        <span>deferred</span> is licensed under the <span><a href="https://tldrlegal.com/search?q=Artistic">Artistic</a></span> license and ©<span>2014</span> <span>Nicolas Hafner &lt;shinmera@tymoon.eu&gt;</span>. This library can be obtained on <a href="https://github.com/Shinmera/deferred/">https://github.com/Shinmera/deferred/</a>.
+      </article>
+      <article>
+        <h2>Package Index</h2>
+        <ul><li class="package">
+            <h3>
+              <a name="DEFERRED" href="#DEFERRED">DEFERRED</a>
+              <span class="nicknames">(ORG.TYMOONNEXT.DEFERRED)</span>
+            </h3>
+            <ul><li>
+                <a name="DEFERRED:PROCESS"/>
+                <article>
+                  <header>
+                    <span>GENERIC</span>
+                    <code>
+                      <h4><a href="#DEFERRED:PROCESS">PROCESS</a></h4>
+                      <span></span>
+                      <span>(THING)</span>
+                    </code>
+                  </header>
+                  <pre>Processes THING to transform all deferred symbols within into their proper representations.</pre>
+                </article>
+              </li><li>
+                <a name="DEFERRED:WITH-DEFERRED-LIBRARY"/>
+                <article>
+                  <header>
+                    <span>MACRO</span>
+                    <code>
+                      <h4><a href="#DEFERRED:WITH-DEFERRED-LIBRARY">WITH-DEFERRED-LIBRARY</a></h4>
+                      <span></span>
+                      <span>((ASDF-SYSTEM &amp;KEY (PACKAGE ASDF-SYSTEM) (IF-NOT-LOADED AUTO)) &amp;BODY BODY)</span>
+                    </code>
+                  </header>
+                  <pre>Turns the body into one capable of using deferred symbols.
+
+Specifying deferred symbols works just like other symbols, except prefixing them with #^ .
+If the #^ reader macro has been overwritten in the standard readtable, please use
+ (named-readtables:in-readtable :deferred)
+
+ASDF-SYSTEM   --- An ASDF system designator.
+PACKAGE       --- A package designator to use as the default package for deferred symbols.
+IF-NOT-LOADED ::= NIL | :QUICKLOAD | :LOAD | :AUTO | T
+                  NIL will simply skip executing the body if the library has not been loaded.
+                  :LOAD will try to use ASDF:LOAD-SYSTEM and :QUICKLISP QL:QUICKLOAD.
+                  :AUTO or T will try to do the right thing by checking for Quicklisp and ASDF
+                  presence first. If neither can be found, an error is signalled. If the loading
+                  operation fails, a warning is signalled and the body is NOT executed.
+
+The only place I can think of that deferred symbols are currently not supported for is SETF
+accessors. This is left out since there's no way to defer SETF-expanders to runtime.
+You can still SETF symbol-values (special variables f.e.), but an error is signalled if
+a deferred function is used within SETF.</pre>
+                </article>
+              </li><li>
+                <a name="DEFERRED:*DEFERRED-PACKAGE*"/>
+                <article>
+                  <header>
+                    <span>SPECIAL</span>
+                    <code>
+                      <h4><a href="#DEFERRED:*DEFERRED-PACKAGE*">*DEFERRED-PACKAGE*</a></h4>
+                      <span></span>
+                      <span></span>
+                    </code>
+                  </header>
+                  <pre>The default package to use for deferred symbols.</pre>
+                </article>
+              </li></ul></li></ul></article></div></body></html>

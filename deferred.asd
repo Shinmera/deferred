@@ -10,7 +10,7 @@
 
 (defsystem deferred
   :name "Deferred"
-  :version "0.2.0"
+  :version "0.9.0"
   :license "Artistic"
   :author "Nicolas Hafner <shinmera@tymoon.eu>"
   :maintainer "Nicolas Hafner <shinmera@tymoon.eu>"

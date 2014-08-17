@@ -11,6 +11,6 @@ Deferred uses two components: a dispatch reader macro on `#^` and a macro, `WITH
   (#^http-request "http://google.com"))
 ```
 
-Deferred symbols can be used in function calls, with FUNCTION and QUOTE and as values (f.e. special variables). Currently unsupported are deferred SETF functions as it's impossible to properly defer a SETF-expander until execution-time.
+Deferred symbols can be used in function calls, with `FUNCTION` and `QUOTE` and as values (f.e. special variables). Currently unsupported are deferred `SETF` functions as it's impossible to properly defer a `SETF`-expander until execution-time.
 
 If the default dispatch reader macro has been overwritten in your readtable for one reason or another, you can use `(named-readtables:in-readtable :deferred)`.
