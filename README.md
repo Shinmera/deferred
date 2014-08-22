@@ -21,9 +21,9 @@ If instead you are looking for code that is only compiled when certain libraries
 (defun frillneckedlizard ()
   (error "NOT IMPLEMENTED!"))
 
-(deferred:when-packages (:drakma)
+(when-packages (:drakma)
   (defun frillneckedlizard ()
-  (#^drakma:http-request "http://frillneckedlizard.moe")))
+    (#^drakma:http-request "http://frillneckedlizard.moe")))
 ```
 
 If the default dispatch reader macro has been overwritten in your readtable for one reason or another, you can use `(named-readtables:in-readtable :deferred)`.
