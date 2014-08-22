@@ -31,12 +31,23 @@
 
 <h2>How To</h2>
 
-<p>Deferred uses two components: a dispatch reader macro on <code>#^</code> and a macro, <code><a href="#DEFERRED:WITH-DEFERRED-LIBRARY">WITH-DEFERRED-LIBRARY</a></code>. <code>#^</code> is used to circumvent the reader problem of being unable to refer to symbols in packages that don't exist at read-time. The macro is used to then acquire access to the symbol's environment to figure out the proper transformation for the symbol into an execution-time determined value.</p>
+<p>Deferred uses two components: a dispatch reader macro on <code>#^</code> and two macros, <code><a href="#DEFERRED:WITH-DEFERRED-LIBRARY">WITH-DEFERRED-LIBRARY</a></code> or <code><a href="#DEFERRED:WHEN-PACKAGES">WHEN-PACKAGES</a></code>. <code>#^</code> is used to circumvent the reader problem of being unable to refer to symbols in packages that don't exist at read-time. The macro is used to then acquire access to the symbol's environment to figure out the proper transformation for the symbol into proper values.</p>
+
+<p><code><a href="#DEFERRED:WITH-DEFERRED-LIBRARY">WITH-DEFERRED-LIBRARY</a></code> is used to specify deferred libraries that are needed at execution time. Meaning the required library can be loaded only just when the code block is executed.</p>
 
 <pre><code>(<a href="#DEFERRED:WITH-DEFERRED-LIBRARY">with-deferred-library</a> (:drakma)
   (#^http-request &quot;http://google.com&quot;))</code></pre>
 
 <p>Deferred symbols can be used in function calls, with <code><a href="http://l1sp.org/cl/FUNCTION">FUNCTION</a></code> and <code><a href="http://l1sp.org/cl/QUOTE">QUOTE</a></code> and as values (f.e. special variables). Currently unsupported are deferred <code><a href="http://l1sp.org/cl/SETF">SETF</a></code> functions as it's impossible to properly defer a <code><a href="http://l1sp.org/cl/SETF">SETF</a></code>-expander until execution-time.</p>
+
+<p>If instead you are looking for code that is only compiled when certain libraries are already loaded before yours, there is <code><a href="#DEFERRED:WHEN-PACKAGES">WHEN-PACKAGES</a></code>. This macro only outputs code when the specified list of packages can be found, otherwise it expands to NIL. This is useful if you don't want to encounter the edge-cases and performance penalties of <code><a href="#DEFERRED:WITH-DEFERRED-LIBRARY">WITH-DEFERRED-LIBRARY</a></code> and can depend on the fact that if the deferred feature is needed, its dependencies are loaded before your system.</p>
+
+<pre><code>(<a href="http://l1sp.org/cl/DEFUN">defun</a> frillneckedlizard ()
+  (<a href="http://l1sp.org/cl/ERROR">error</a> &quot;NOT IMPLEMENTED!&quot;))
+
+(<a href="#DEFERRED:WHEN-PACKAGES">deferred:when-packages</a> (:drakma)
+  (<a href="http://l1sp.org/cl/DEFUN">defun</a> frillneckedlizard ()
+  (#^drakma:http-request &quot;http://frillneckedlizard.moe&quot;)))</code></pre>
 
 <p>If the default dispatch reader macro has been overwritten in your readtable for one reason or another, you can use <code>(named-readtables:in-readtable :deferred)</code>.</p>
 </span>
@@ -65,6 +76,34 @@
                     </code>
                   </header>
                   <pre>Processes THING to transform all deferred symbols within into their proper representations.</pre>
+                </article>
+              </li><li>
+                <a name="DEFERRED:PROCESS-COMPILE"/>
+                <article>
+                  <header>
+                    <span>GENERIC</span>
+                    <code>
+                      <h4><a href="#DEFERRED:PROCESS-COMPILE">PROCESS-COMPILE</a></h4>
+                      <span></span>
+                      <span>(THING)</span>
+                    </code>
+                  </header>
+                  <pre>Processes THING to transform all deferred symbols within into their proper compile-able representations.</pre>
+                </article>
+              </li><li>
+                <a name="DEFERRED:WHEN-PACKAGES"/>
+                <article>
+                  <header>
+                    <span>MACRO</span>
+                    <code>
+                      <h4><a href="#DEFERRED:WHEN-PACKAGES">WHEN-PACKAGES</a></h4>
+                      <span></span>
+                      <span>(PACKAGES &amp;BODY BODY)</span>
+                    </code>
+                  </header>
+                  <pre>Similar to WITH-DEFERRED-LIBRARY, except to be used to compile optional code.
+
+The macro returns the transformed body if it can find all packages, otherwise NIL.</pre>
                 </article>
               </li><li>
                 <a name="DEFERRED:WITH-DEFERRED-LIBRARY"/>

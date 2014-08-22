@@ -11,5 +11,7 @@
   (:export
    #:*deferred-package*
    #:process
-   #:with-deferred-library))
+   #:with-deferred-library
+   #:process-compile
+   #:when-packages))
 

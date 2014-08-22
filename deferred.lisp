@@ -53,17 +53,17 @@ READ-DEFERRED and PROCESS use these to handle the transformations.")
     thing)
   (:method ((list list))
     (cond
+      ((eql (car list) *identifier-symbol*)
+       ;; We got us a value reference!
+       (destructuring-bind (ident name &optional (package *deferred-package*)) list
+         (declare (ignore ident))
+         `(symbol-value (find-symbol ,name ,package))))
       ((and (listp (first list)) (eql (caar list) *identifier-symbol*))
        ;; We got us a function call!
        (destructuring-bind (ident name &optional (package *deferred-package*)) (car list)
          (declare (ignore ident))
          `(funcall (symbol-function (find-symbol ,name ,package))
                    ,@(mapcar #'process (rest list)))))
-      ((eql (car list) *identifier-symbol*)
-       ;; We got us a value reference!
-       (destructuring-bind (ident name &optional (package *deferred-package*)) list
-         (declare (ignore ident))
-         `(symbol-value (find-symbol ,name ,package))))
       ((and (eql (first list) 'FUNCTION) (listp (second list)) (eql (caadr list) *identifier-symbol*))
        ;; We got us a function reference!
        (destructuring-bind (ident name &optional (package *deferred-package*)) (second list)
@@ -126,3 +126,43 @@ a deferred function is used within SETF."
                     (warn "Could not load optional library system ~a (~a)" ,asdf err)
                     (return-from ,block)))))))
        ,@(process body))))
+
+
+(defgeneric process-compile (thing)
+  (:documentation "Processes THING to transform all deferred symbols within into their proper compile-able representations.")
+  (:method (thing)
+    thing)
+  (:method ((list list))
+    (cond
+      ((eql (car list) *identifier-symbol*)
+       ;; We got us a value reference!
+       (destructuring-bind (ident name &optional (package *deferred-package*)) list
+         (declare (ignore ident))
+         (find-symbol name package)))
+      ((and (listp (first list)) (eql (caar list) *identifier-symbol*))
+       ;; We got us a function call!
+       (destructuring-bind (ident name &optional (package *deferred-package*)) (car list)
+         (declare (ignore ident))
+         `(,(find-symbol name package)
+           ,@(mapcar #'process (rest list)))))
+      ((and (eql (first list) 'FUNCTION) (listp (second list)) (eql (caadr list) *identifier-symbol*))
+       ;; We got us a function reference!
+       (destructuring-bind (ident name &optional (package *deferred-package*)) (second list)
+         (declare (ignore ident))
+         `(function ,(find-symbol name package))))
+      ((and (eql (first list) 'QUOTE) (listp (second list)) (eql (caadr list) *identifier-symbol*))
+       ;; We got us a symbol reference!
+       (destructuring-bind (ident name &optional (package *deferred-package*)) (second list)
+         (declare (ignore ident))
+         `(quote ,(find-symbol name package))))
+      (T
+       (mapcar #'process list)))))
+
+(defmacro when-packages (packages &body body)
+  "Similar to WITH-DEFERRED-LIBRARY, except to be used to compile optional code.
+
+The macro returns the transformed body if it can find all packages, otherwise NIL."
+  (when (loop for package in packages
+              always (find-package package))
+    `(progn
+       ,@(process-compile body))))
