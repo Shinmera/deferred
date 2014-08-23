@@ -114,11 +114,11 @@ a deferred function is used within SETF."
            ,(ecase if-not-loaded
               (NIL `(return-from ,block))
               (:load `(asdf:load-system ,asdf))
-              (:quickload `(ql:quickload ,asdf))
+              (:quickload `(funcall (find-symbol "QUICKLOAD" "QL") ,asdf))
               ((:auto T)
                `(handler-case
                     ,(cond ((member :quicklisp *features*)
-                            `(ql:quickload ,asdf))
+                            `(funcall (find-symbol "QUICKLOAD" "QL") ,asdf))
                            ((member :asdf *features*)
                             `(asdf:load-system ,asdf))
                            (T `(error "ASDF not present.")))
