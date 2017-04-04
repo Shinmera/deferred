@@ -6,38 +6,41 @@
           font-size: 14pt;
           padding: 5px;
       }
-
       body>header{
           display:flex;
           align-items: center;
           justify-content: center;
           flex-direction: column;
           max-width: 100%;
+          text-align: center;
       }
-
+      body>header img{
+          max-width: 50%;
+      }
       img{
           max-width: 100%;
           max-height: 100%;
       }
-
       code{
           font-family: Consolas, Inconsolata, monospace;
       }
-
       a{
           text-decoration: none;
           color: #0055AA;
       }
-
+      a img{
+          border: none;
+      }
       #documentation{
           text-align: justify;
       }
-
       #documentation pre{
           margin-left: 20px;
           overflow: auto;
       }
-
+      #documentation img{
+          margin: 5px;
+      }
       #symbol-index>ul{
           list-style: none;
           padding: 0;
@@ -68,7 +71,6 @@
           white-space: pre-wrap;
           font-size: 12pt;
       }
-
       @media (max-width: 800px){
           body{font-size: 12pt;}
       } </style> </head> <body> <header> <h1>deferred</h1> <span class="version">0.9.0</span> <p class="description">A simple library allowing you to write code using deferred libraries.</p> </header> <main> <article id="documentation">  <div><h2>About Deferred</h2> <p>Sometimes I would like to include code in my project that is only available if certain libraries are loaded. Since I don't want to require these libraries as dependencies, but can't refer to their symbols either without them being loaded, things get a bit messy. This library attempts to provide a much more convenient way.</p> <h2>How To</h2> <p>Deferred uses two components: a dispatch reader macro on <code>#^</code> and two macros, <code><a href="#DEFERRED:WITH-DEFERRED-LIBRARY">WITH-DEFERRED-LIBRARY</a></code> or <code><a href="#DEFERRED:WHEN-PACKAGES">WHEN-PACKAGES</a></code>. <code>#^</code> is used to circumvent the reader problem of being unable to refer to symbols in packages that don't exist at read-time. The macro is used to then acquire access to the symbol's environment to figure out the proper transformation for the symbol into proper values.</p> <p><code><a href="#DEFERRED:WITH-DEFERRED-LIBRARY">WITH-DEFERRED-LIBRARY</a></code> is used to specify deferred libraries that are needed at execution time. Meaning the required library can be loaded only just when the code block is executed.</p> <pre><code>(<a href="#DEFERRED:WITH-DEFERRED-LIBRARY">with-deferred-library</a> (:drakma)
@@ -77,9 +79,9 @@
 
 (<a href="#DEFERRED:WHEN-PACKAGES">when-packages</a> (:drakma)
   (<a href="http://l1sp.org/cl/defun">defun</a> frillneckedlizard ()
-    (#^drakma:http-request &quot;http://frillneckedlizard.moe&quot;)))</code></pre> <p>If the default dispatch reader macro has been overwritten in your readtable for one reason or another, you can use <code>(named-readtables:in-readtable :deferred)</code>.</p> </div>  </article> <article id="copyright">  <h2>Copyright</h2> <span>deferred</span> is licensed under the <span><a href="https://tldrlegal.com/search?q=Artistic">Artistic</a></span> license.  © <span>Nicolas Hafner &lt;shinmera@tymoon.eu&gt;</span> .  This library can be obtained on <a href="https://github.com/Shinmera/deferred/">https://github.com/Shinmera/deferred/</a>.  </article>  <article id="symbol-index"> <h2>Package Index</h2> <ul><li class="package"> <h3> <a name="DEFERRED" href="#DEFERRED">DEFERRED</a> <span class="nicknames">(ORG.TYMOONNEXT.DEFERRED)</span> </h3> <ul><li> <a name="DEFERRED:*DEFERRED-PACKAGE*"> </a> <article> <header class="special"> <span class="type">special</span>  <h4 class="name"><code><a href="#DEFERRED:*DEFERRED-PACKAGE*">*DEFERRED-PACKAGE*</a></code></h4>  </header> <pre class="docstring">The default package to use for deferred symbols.</pre> </article> </li><li> <a name="DEFERRED:PROCESS"> </a> <article> <header class="generic"> <span class="type">generic</span>  <code>(</code><h4 class="name"><code><a href="#DEFERRED:PROCESS">PROCESS</a></code></h4> <code class="qualifiers"></code> <code class="arguments">THING</code><code>)</code>  </header> <pre class="docstring">Processes THING to transform all deferred symbols within into their proper representations.</pre> </article> </li><li> <a name="DEFERRED:PROCESS-COMPILE"> </a> <article> <header class="generic"> <span class="type">generic</span>  <code>(</code><h4 class="name"><code><a href="#DEFERRED:PROCESS-COMPILE">PROCESS-COMPILE</a></code></h4> <code class="qualifiers"></code> <code class="arguments">THING</code><code>)</code>  </header> <pre class="docstring">Processes THING to transform all deferred symbols within into their proper compile-able representations.</pre> </article> </li><li> <a name="DEFERRED:WHEN-PACKAGES"> </a> <article> <header class="macro"> <span class="type">macro</span>  <code>(</code><h4 class="name"><code><a href="#DEFERRED:WHEN-PACKAGES">WHEN-PACKAGES</a></code></h4> <code class="qualifiers"></code> <code class="arguments">&amp;REST ARGS</code><code>)</code>  </header> <pre class="docstring">Similar to WITH-DEFERRED-LIBRARY, except to be used to compile optional code.
+    (#^drakma:http-request &quot;http://frillneckedlizard.moe&quot;)))</code></pre> <p>If the default dispatch reader macro has been overwritten in your readtable for one reason or another, you can use <code>(named-readtables:in-readtable :deferred)</code>.</p> </div>  </article> <article id="copyright">  <h2>Copyright</h2> <span>deferred</span> is licensed under the <span><a href="https://tldrlegal.com/search?q=Artistic">Artistic</a></span> license.  © <span>Nicolas Hafner &lt;shinmera@tymoon.eu&gt;</span> .  This library can be obtained on <a href="https://github.com/Shinmera/deferred/">https://github.com/Shinmera/deferred/</a>.  </article>  <article id="symbol-index"> <h2>Package Index</h2> <ul><li class="package"> <h3> <a name="DEFERRED" href="#DEFERRED">DEFERRED</a> <span class="nicknames">(ORG.TYMOONNEXT.DEFERRED)</span> </h3> <ul><li> <a name="DEFERRED:*DEFERRED-PACKAGE*"> </a> <article> <header class="special"> <span class="type">special</span>  <h4 class="name"><code><a href="#DEFERRED:*DEFERRED-PACKAGE*">*DEFERRED-PACKAGE*</a></code></h4>  </header> <div class="docstring"><pre>The default package to use for deferred symbols.</pre></div> </article> </li><li> <a name="DEFERRED:PROCESS"> </a> <article> <header class="generic"> <span class="type">generic</span>  <code>(</code><h4 class="name"><code><a href="#DEFERRED:PROCESS">PROCESS</a></code></h4> <code class="qualifiers"></code> <code class="arguments">THING</code><code>)</code>  </header> <div class="docstring"><pre>Processes THING to transform all deferred symbols within into their proper representations.</pre></div> </article> </li><li> <a name="DEFERRED:PROCESS-COMPILE"> </a> <article> <header class="generic"> <span class="type">generic</span>  <code>(</code><h4 class="name"><code><a href="#DEFERRED:PROCESS-COMPILE">PROCESS-COMPILE</a></code></h4> <code class="qualifiers"></code> <code class="arguments">THING</code><code>)</code>  </header> <div class="docstring"><pre>Processes THING to transform all deferred symbols within into their proper compile-able representations.</pre></div> </article> </li><li> <a name="DEFERRED:WHEN-PACKAGES"> </a> <article> <header class="macro"> <span class="type">macro</span>  <code>(</code><h4 class="name"><code><a href="#DEFERRED:WHEN-PACKAGES">WHEN-PACKAGES</a></code></h4> <code class="qualifiers"></code> <code class="arguments">PACKAGES &amp;BODY BODY</code><code>)</code>  </header> <div class="docstring"><pre>Similar to WITH-DEFERRED-LIBRARY, except to be used to compile optional code.
 
-The macro returns the transformed body if it can find all packages, otherwise NIL.</pre> </article> </li><li> <a name="DEFERRED:WITH-DEFERRED-LIBRARY"> </a> <article> <header class="macro"> <span class="type">macro</span>  <code>(</code><h4 class="name"><code><a href="#DEFERRED:WITH-DEFERRED-LIBRARY">WITH-DEFERRED-LIBRARY</a></code></h4> <code class="qualifiers"></code> <code class="arguments">&amp;REST ARGS</code><code>)</code>  </header> <pre class="docstring">Turns the body into one capable of using deferred symbols.
+The macro returns the transformed body if it can find all packages, otherwise NIL.</pre></div> </article> </li><li> <a name="DEFERRED:WITH-DEFERRED-LIBRARY"> </a> <article> <header class="macro"> <span class="type">macro</span>  <code>(</code><h4 class="name"><code><a href="#DEFERRED:WITH-DEFERRED-LIBRARY">WITH-DEFERRED-LIBRARY</a></code></h4> <code class="qualifiers"></code> <code class="arguments">(ASDF-SYSTEM &amp;KEY (PACKAGE) (IF-NOT-LOADED :AUTO)) &amp;BODY BODY</code><code>)</code>  </header> <div class="docstring"><pre>Turns the body into one capable of using deferred symbols.
 
 Specifying deferred symbols works just like other symbols, except prefixing them with #^ .
 If the #^ reader macro has been overwritten in the standard readtable, please use
@@ -97,4 +99,4 @@ IF-NOT-LOADED ::= NIL | :QUICKLOAD | :LOAD | :AUTO | T
 The only place I can think of that deferred symbols are currently not supported for is SETF
 accessors. This is left out since there's no way to defer SETF-expanders to runtime.
 You can still SETF symbol-values (special variables f.e.), but an error is signalled if
-a deferred function is used within SETF.</pre> </article> </li></ul> </li></ul> </article>  </main> </body> </html> 
+a deferred function is used within SETF.</pre></div> </article> </li></ul> </li></ul> </article>  </main> </body> </html> 
