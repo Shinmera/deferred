@@ -4,10 +4,6 @@
  Author: Nicolas Hafner <shinmera@tymoon.eu>
 |#
 
-(defpackage #:org.tymoonnext.deferred.asdf
-  (:use #:cl #:asdf))
-(in-package #:org.tymoonnext.deferred.asdf)
-
 (defsystem deferred
   :name "Deferred"
   :version "0.9.0"
