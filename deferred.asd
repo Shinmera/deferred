@@ -11,7 +11,9 @@
   :author "Nicolas Hafner <shinmera@tymoon.eu>"
   :maintainer "Nicolas Hafner <shinmera@tymoon.eu>"
   :description "A simple library allowing you to write code using deferred libraries."
-  :homepage "https://github.com/Shinmera/deferred/"
+  :homepage "https://Shinmera.github.io/deferred//"
+  :bug-tracker "https://github.com/Shinmera/deferred//issues"
+  :source-control (:git "https://github.com/Shinmera/deferred/.git")
   :serial T
   :components ((:file "package")
                (:file "deferred"))
