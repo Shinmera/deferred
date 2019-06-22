@@ -7,7 +7,7 @@
 (defsystem deferred
   :name "Deferred"
   :version "0.9.0"
-  :license "Artistic"
+  :license "zlib"
   :author "Nicolas Hafner <shinmera@tymoon.eu>"
   :maintainer "Nicolas Hafner <shinmera@tymoon.eu>"
   :description "A simple library allowing you to write code using deferred libraries."
